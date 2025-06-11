@@ -1,5 +1,5 @@
-
 import { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { BottomNavigation } from '@/components/layout/BottomNavigation';
 import { ProductCard } from '@/components/products/ProductCard';
@@ -15,6 +15,7 @@ import { useCart } from '@/context/CartContext';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 
 function HomeContent() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -205,7 +206,14 @@ function HomeContent() {
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-lg font-semibold">Total: ${getTotalPrice().toFixed(2)}</span>
                   </div>
-                  <Button className="w-full" size="lg">
+                  <Button 
+                    className="w-full" 
+                    size="lg"
+                    onClick={() => {
+                      setShowCart(false);
+                      navigate('/checkout');
+                    }}
+                  >
                     Proceed to Checkout
                   </Button>
                 </div>
