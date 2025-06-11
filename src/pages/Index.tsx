@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { Header } from '@/components/layout/Header';
 import { BottomNavigation } from '@/components/layout/BottomNavigation';
@@ -20,7 +19,7 @@ function HomeContent() {
   const [showCart, setShowCart] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const { items, updateQuantity, removeFromCart, getTotalPrice } = useCart();
+  const { items, updateQuantity, removeFromCart, getTotalPrice, addToCart } = useCart();
 
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
@@ -39,7 +38,6 @@ function HomeContent() {
 
   const renderHomeTab = () => (
     <div className="space-y-6">
-      {/* Featured Products */}
       <section>
         <h2 className="text-xl font-bold mb-4 px-4 md:px-0">Featured Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 md:px-0">
@@ -53,13 +51,11 @@ function HomeContent() {
         </div>
       </section>
 
-      {/* Category Filter */}
       <CategoryFilter
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
       />
 
-      {/* All Products */}
       <section>
         <h2 className="text-xl font-bold mb-4 px-4 md:px-0">
           {selectedCategory === 'all' ? 'All Products' : selectedCategory}
@@ -226,7 +222,7 @@ function HomeContent() {
                 className="w-full" 
                 size="lg"
                 onClick={() => {
-                  // Add to cart logic here
+                  addToCart(selectedProduct);
                   setSelectedProduct(null);
                 }}
               >
