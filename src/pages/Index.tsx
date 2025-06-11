@@ -4,9 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { BottomNavigation } from '@/components/layout/BottomNavigation';
 import { ProductCard } from '@/components/products/ProductCard';
 import { CategoryFilter } from '@/components/products/CategoryFilter';
-import { AuthProvider } from '@/context/AuthContext';
-import { CartProvider } from '@/context/CartContext';
-import { FavoritesProvider, useFavorites } from '@/context/FavoritesContext';
+import { useFavorites } from '@/context/FavoritesContext';
 import { products } from '@/data/mockData';
 import { Product } from '@/types';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
@@ -14,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 
-function HomeContent() {
+const Index = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -268,18 +266,6 @@ function HomeContent() {
         </Drawer>
       )}
     </div>
-  );
-}
-
-const Index = () => {
-  return (
-    <AuthProvider>
-      <CartProvider>
-        <FavoritesProvider>
-          <HomeContent />
-        </FavoritesProvider>
-      </CartProvider>
-    </AuthProvider>
   );
 };
 
