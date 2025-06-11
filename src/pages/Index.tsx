@@ -6,6 +6,7 @@ import { ProductCard } from '@/components/products/ProductCard';
 import { CategoryFilter } from '@/components/products/CategoryFilter';
 import { AuthProvider } from '@/context/AuthContext';
 import { CartProvider } from '@/context/CartContext';
+import { FavoritesProvider, useFavorites } from '@/context/FavoritesContext';
 import { products } from '@/data/mockData';
 import { Product } from '@/types';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
@@ -21,6 +22,7 @@ function HomeContent() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const { items, updateQuantity, removeFromCart, getTotalPrice, addToCart } = useCart();
+  const { favorites } = useFavorites();
 
   // Handle cart tab selection
   useEffect(() => {
@@ -82,6 +84,30 @@ function HomeContent() {
     </div>
   );
 
+  const renderFavoritesTab = () => (
+    <div className="space-y-6">
+      <section>
+        <h2 className="text-xl font-bold mb-4 px-4 md:px-0">Your Favorites ({favorites.length})</h2>
+        {favorites.length === 0 ? (
+          <div className="text-center p-8">
+            <p className="text-muted-foreground">No favorite products yet</p>
+            <p className="text-sm text-muted-foreground mt-2">Tap the heart icon on products to add them to your favorites</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 md:px-0">
+            {favorites.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onProductClick={handleProductClick}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+
   const renderProfileTab = () => (
     <div className="max-w-md mx-auto p-4 space-y-6">
       <h2 className="text-2xl font-bold text-center">Profile</h2>
@@ -98,12 +124,7 @@ function HomeContent() {
       case 'search':
         return renderHomeTab();
       case 'favorites':
-        return (
-          <div className="text-center p-8">
-            <h2 className="text-xl font-semibold mb-2">Your Favorites</h2>
-            <p className="text-muted-foreground">Your favorite products will appear here</p>
-          </div>
-        );
+        return renderFavoritesTab();
       case 'profile':
         return renderProfileTab();
       default:
@@ -246,7 +267,9 @@ const Index = () => {
   return (
     <AuthProvider>
       <CartProvider>
-        <HomeContent />
+        <FavoritesProvider>
+          <HomeContent />
+        </FavoritesProvider>
       </CartProvider>
     </AuthProvider>
   );

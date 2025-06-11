@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Star, Heart, ShoppingCart } from 'lucide-react';
 import { Product } from '@/types';
 import { useCart } from '@/context/CartContext';
-import { useState } from 'react';
+import { useFavorites } from '@/context/FavoritesContext';
 
 interface ProductCardProps {
   product: Product;
@@ -13,8 +13,8 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onProductClick }: ProductCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -23,12 +23,14 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
 
   const handleToggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsFavorite(!isFavorite);
+    toggleFavorite(product);
   };
 
   const discountPercentage = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
+
+  const isProductFavorite = isFavorite(product.id);
 
   return (
     <Card
@@ -56,10 +58,10 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
           size="sm"
           onClick={handleToggleFavorite}
           className={`absolute bottom-2 right-2 h-8 w-8 rounded-full ${
-            isFavorite ? 'text-red-500' : 'text-muted-foreground'
+            isProductFavorite ? 'text-red-500' : 'text-muted-foreground'
           }`}
         >
-          <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
+          <Heart className={`h-4 w-4 ${isProductFavorite ? 'fill-current' : ''}`} />
         </Button>
       </div>
 
