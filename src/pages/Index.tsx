@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+
+import { useState, useMemo, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { BottomNavigation } from '@/components/layout/BottomNavigation';
 import { ProductCard } from '@/components/products/ProductCard';
@@ -20,6 +21,14 @@ function HomeContent() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const { items, updateQuantity, removeFromCart, getTotalPrice, addToCart } = useCart();
+
+  // Handle cart tab selection
+  useEffect(() => {
+    if (activeTab === 'cart') {
+      setShowCart(true);
+      setActiveTab('home'); // Reset to home to avoid staying on cart tab
+    }
+  }, [activeTab]);
 
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
@@ -87,9 +96,6 @@ function HomeContent() {
       case 'home':
         return renderHomeTab();
       case 'search':
-        return renderHomeTab();
-      case 'cart':
-        setShowCart(true);
         return renderHomeTab();
       case 'favorites':
         return (
