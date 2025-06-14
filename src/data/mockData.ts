@@ -2,84 +2,102 @@
 import { Product, Category } from '@/types';
 
 export const categories: Category[] = [
-  { id: '1', name: 'Electronics', icon: '📱' },
-  { id: '2', name: 'Clothing', icon: '👕' },
-  { id: '3', name: 'Books', icon: '📚' },
-  { id: '4', name: 'Home & Garden', icon: '🏠' },
-  { id: '5', name: 'Sports', icon: '⚽' },
+  { id: '1', name: 'Electronics', icon: 'smartphone' },
+  { id: '2', name: 'Fashion', icon: 'shirt' },
+  { id: '3', name: 'Home & Garden', icon: 'home' },
+  { id: '4', name: 'Sports', icon: 'dumbbell' },
+  { id: '5', name: 'Books', icon: 'book' },
 ];
 
 export const products: Product[] = [
   {
     id: '1',
-    name: 'iPhone 15 Pro',
-    description: 'Latest iPhone with advanced camera system and A17 Pro chip',
-    price: 999,
-    originalPrice: 1099,
-    images: ['/placeholder.svg', '/placeholder.svg'],
+    name: 'Wireless Headphones',
+    description: 'Premium wireless headphones with noise cancellation and 30-hour battery life.',
+    price: 199.99,
+    originalPrice: 249.99,
+    images: [
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
+      'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=500'
+    ],
     category: 'Electronics',
-    rating: 4.8,
-    reviewCount: 2547,
+    rating: 4.5,
+    reviewCount: 128,
     inStock: true,
-    featured: true,
+    featured: true
   },
   {
     id: '2',
-    name: 'Samsung Galaxy S24',
-    description: 'Flagship Android phone with excellent display and camera',
-    price: 899,
-    images: ['/placeholder.svg'],
+    name: 'Smart Watch',
+    description: 'Advanced fitness tracking with heart rate monitor and GPS.',
+    price: 299.99,
+    images: [
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',
+      'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500'
+    ],
     category: 'Electronics',
-    rating: 4.6,
-    reviewCount: 1834,
+    rating: 4.8,
+    reviewCount: 89,
     inStock: true,
-    featured: true,
+    featured: true
   },
   {
     id: '3',
-    name: 'Classic T-Shirt',
-    description: 'Comfortable cotton t-shirt in various colors',
-    price: 29,
-    originalPrice: 39,
-    images: ['/placeholder.svg'],
-    category: 'Clothing',
-    rating: 4.4,
-    reviewCount: 892,
-    inStock: true,
+    name: 'Laptop Backpack',
+    description: 'Water-resistant laptop backpack with multiple compartments.',
+    price: 79.99,
+    originalPrice: 99.99,
+    images: [
+      'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500',
+      'https://images.unsplash.com/photo-1581605405669-fcdf81983e85?w=500'
+    ],
+    category: 'Fashion',
+    rating: 4.3,
+    reviewCount: 56,
+    inStock: true
   },
   {
     id: '4',
-    name: 'JavaScript Guide',
-    description: 'Complete guide to modern JavaScript development',
-    price: 45,
-    images: ['/placeholder.svg'],
-    category: 'Books',
-    rating: 4.7,
-    reviewCount: 456,
+    name: 'Coffee Maker',
+    description: 'Programmable coffee maker with thermal carafe and auto-shutoff.',
+    price: 149.99,
+    images: [
+      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500',
+      'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=500'
+    ],
+    category: 'Home & Garden',
+    rating: 4.6,
+    reviewCount: 234,
     inStock: true,
-    featured: true,
+    featured: true
   },
   {
     id: '5',
-    name: 'Wireless Headphones',
-    description: 'Premium noise-cancelling wireless headphones',
-    price: 199,
-    originalPrice: 249,
-    images: ['/placeholder.svg'],
-    category: 'Electronics',
-    rating: 4.5,
-    reviewCount: 1267,
-    inStock: true,
+    name: 'Running Shoes',
+    description: 'Lightweight running shoes with superior cushioning and breathability.',
+    price: 129.99,
+    originalPrice: 159.99,
+    images: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500',
+      'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500'
+    ],
+    category: 'Sports',
+    rating: 4.4,
+    reviewCount: 167,
+    inStock: true
   },
   {
     id: '6',
-    name: 'Running Shoes',
-    description: 'Comfortable running shoes for daily training',
-    price: 89,
-    images: ['/placeholder.svg'],
-    category: 'Sports',
-    rating: 4.3,
-    reviewCount: 634,
-    inStock: true,
-  },
+    name: 'Wireless Earbuds',
+    description: 'True wireless earbuds with active noise cancellation.',
+    price: 89.99,
+    images: [
+      'https://images.unsplash.com/photo-1590658165737-15a047b3fb9e?w=500',
+      'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=500'
+    ],
+    category: 'Electronics',
+    rating: 4.2,
+    reviewCount: 98,
+    inStock: true
+  }
 ];

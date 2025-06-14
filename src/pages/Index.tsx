@@ -1,10 +1,11 @@
-import { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { useState, useMemo } from 'react';
 import { Header } from '@/components/layout/Header';
 import { BottomNavigation } from '@/components/layout/BottomNavigation';
 import { ProductCard } from '@/components/products/ProductCard';
 import { CategoryFilter } from '@/components/products/CategoryFilter';
-import { useFavorites } from '@/context/FavoritesContext';
+import { AuthProvider } from '@/context/AuthContext';
+import { CartProvider } from '@/context/CartContext';
 import { products } from '@/data/mockData';
 import { Product } from '@/types';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
@@ -12,24 +13,14 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 
-const Index = () => {
-  const navigate = useNavigate();
+function HomeContent() {
   const [activeTab, setActiveTab] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showCart, setShowCart] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const { items, updateQuantity, removeFromCart, getTotalPrice, addToCart } = useCart();
-  const { favorites } = useFavorites();
-
-  // Handle cart tab selection
-  useEffect(() => {
-    if (activeTab === 'cart') {
-      setShowCart(true);
-      setActiveTab('home'); // Reset to home to avoid staying on cart tab
-    }
-  }, [activeTab]);
+  const { items, updateQuantity, removeFromCart, getTotalPrice } = useCart();
 
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
@@ -48,6 +39,7 @@ const Index = () => {
 
   const renderHomeTab = () => (
     <div className="space-y-6">
+      {/* Featured Products */}
       <section>
         <h2 className="text-xl font-bold mb-4 px-4 md:px-0">Featured Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 md:px-0">
@@ -61,11 +53,13 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Category Filter */}
       <CategoryFilter
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
       />
 
+      {/* All Products */}
       <section>
         <h2 className="text-xl font-bold mb-4 px-4 md:px-0">
           {selectedCategory === 'all' ? 'All Products' : selectedCategory}
@@ -79,30 +73,6 @@ const Index = () => {
             />
           ))}
         </div>
-      </section>
-    </div>
-  );
-
-  const renderFavoritesTab = () => (
-    <div className="space-y-6">
-      <section>
-        <h2 className="text-xl font-bold mb-4 px-4 md:px-0">Your Favorites ({favorites.length})</h2>
-        {favorites.length === 0 ? (
-          <div className="text-center p-8">
-            <p className="text-muted-foreground">No favorite products yet</p>
-            <p className="text-sm text-muted-foreground mt-2">Tap the heart icon on products to add them to your favorites</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 md:px-0">
-            {favorites.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onProductClick={handleProductClick}
-              />
-            ))}
-          </div>
-        )}
       </section>
     </div>
   );
@@ -122,8 +92,16 @@ const Index = () => {
         return renderHomeTab();
       case 'search':
         return renderHomeTab();
+      case 'cart':
+        setShowCart(true);
+        return renderHomeTab();
       case 'favorites':
-        return renderFavoritesTab();
+        return (
+          <div className="text-center p-8">
+            <h2 className="text-xl font-semibold mb-2">Your Favorites</h2>
+            <p className="text-muted-foreground">Your favorite products will appear here</p>
+          </div>
+        );
       case 'profile':
         return renderProfileTab();
       default:
@@ -204,14 +182,7 @@ const Index = () => {
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-lg font-semibold">Total: ${getTotalPrice().toFixed(2)}</span>
                   </div>
-                  <Button 
-                    className="w-full" 
-                    size="lg"
-                    onClick={() => {
-                      setShowCart(false);
-                      navigate('/checkout');
-                    }}
-                  >
+                  <Button className="w-full" size="lg">
                     Proceed to Checkout
                   </Button>
                 </div>
@@ -255,7 +226,7 @@ const Index = () => {
                 className="w-full" 
                 size="lg"
                 onClick={() => {
-                  addToCart(selectedProduct);
+                  // Add to cart logic here
                   setSelectedProduct(null);
                 }}
               >
@@ -266,6 +237,16 @@ const Index = () => {
         </Drawer>
       )}
     </div>
+  );
+}
+
+const Index = () => {
+  return (
+    <AuthProvider>
+      <CartProvider>
+        <HomeContent />
+      </CartProvider>
+    </AuthProvider>
   );
 };
 
