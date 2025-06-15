@@ -6,15 +6,20 @@ import { Star, Heart, ShoppingCart } from 'lucide-react';
 import { Product } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { useFavorites } from '@/context/FavoritesContext';
+import { useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
   onProductClick: (product: Product) => void;
 }
 
+// Simple fallback image
+const FALLBACK_IMG = "https://via.placeholder.com/300x200?text=Image+Unavailable";
+
 export function ProductCard({ product, onProductClick }: ProductCardProps) {
   const { addToCart } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const [imgSrc, setImgSrc] = useState(product.images[0] || FALLBACK_IMG);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -39,9 +44,10 @@ export function ProductCard({ product, onProductClick }: ProductCardProps) {
     >
       <div className="relative">
         <img
-          src={product.images[0]}
+          src={imgSrc}
           alt={product.name}
           className="w-full h-48 object-cover"
+          onError={() => setImgSrc(FALLBACK_IMG)}
         />
         {product.featured && (
           <Badge className="absolute top-2 left-2" variant="secondary">
