@@ -19,6 +19,7 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCart, setShowCart] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [modalImage, setModalImage] = useState<string | undefined>();
 
   const { items, updateQuantity, removeFromCart, getTotalPrice, addToCart } = useCart();
   const { favorites } = useFavorites();
@@ -44,6 +45,7 @@ const Index = () => {
 
   const handleProductClick = (product: Product) => {
     setSelectedProduct(product);
+    setModalImage(product.images?.[0]);
   };
 
   const renderHomeTab = () => (
@@ -223,17 +225,47 @@ const Index = () => {
 
       {/* Product Detail Modal */}
       {selectedProduct && (
-        <Drawer open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
+        <Drawer
+          open={!!selectedProduct}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) {
+              setSelectedProduct(null);
+            }
+          }}
+        >
           <DrawerContent className="max-h-[90vh]">
             <DrawerHeader>
               <DrawerTitle>{selectedProduct.name}</DrawerTitle>
             </DrawerHeader>
             <div className="p-4 space-y-4 overflow-y-auto">
               <img
-                src={selectedProduct.images[0]}
+                src={modalImage || "https://via.placeholder.com/300x200?text=Image+Unavailable"}
                 alt={selectedProduct.name}
                 className="w-full h-64 object-cover rounded-lg"
+                onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/300x200?text=Image+Unavailable")}
               />
+
+              {selectedProduct.images && selectedProduct.images.length > 1 && (
+                <div className="flex space-x-2 overflow-x-auto pb-2">
+                  {selectedProduct.images.map((image, index) => (
+                    <button
+                      key={index}
+                      className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded-lg flex-shrink-0"
+                      onClick={() => setModalImage(image)}
+                    >
+                      <img
+                        src={image}
+                        alt={`${selectedProduct.name} thumbnail ${index + 1}`}
+                        className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${
+                          modalImage === image ? 'border-primary' : 'border-transparent'
+                        }`}
+                        onError={(e) => (e.currentTarget.parentElement!.style.display = 'none')}
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold">${selectedProduct.price}</span>
